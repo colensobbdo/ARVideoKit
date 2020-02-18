@@ -13,6 +13,8 @@
     /// Recommended for iPhone X
     case aspectFill
     case viewAspectRatio
+    /// Resize and crop to fit the screen size
+    case screenAspectRatio
 }
 
 /// Allows specifying the video rendering frame per second `FPS` rate.
