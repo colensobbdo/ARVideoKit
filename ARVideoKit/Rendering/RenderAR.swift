@@ -54,6 +54,14 @@ struct RenderAR {
             case .aspectFill:
                 width = Int(UIScreen.main.nativeBounds.width)
                 height = Int(UIScreen.main.nativeBounds.height)
+            /// Resize and crop to fit the screen size
+            case .screenAspectRatio:
+                let bufferWidth = CVPixelBufferGetWidth(raw)
+                let bufferHeight = CVPixelBufferGetHeight(raw)
+                let screenSize = UIScreen.main.nativeBounds.size
+                let targetSize = AVMakeRect(aspectRatio: screenSize, insideRect: CGRect(x: 0, y: 0, width: bufferWidth, height: bufferHeight)).size
+                width = Int(targetSize.width)
+                height = Int(targetSize.height)
             case .viewAspectRatio where view is UIView:
                 let bufferWidth = CVPixelBufferGetWidth(raw)
                 let bufferHeight = CVPixelBufferGetHeight(raw)

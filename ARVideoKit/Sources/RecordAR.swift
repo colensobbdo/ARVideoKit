@@ -129,16 +129,20 @@ import PhotosUI
     /**
      Initialize 🌞🍳 `RecordAR` with an `ARSCNView` 🚀.
      */
-    @objc override public init?(ARSceneKit: ARSCNView) {
+    @objc public init?(ARSceneKit: ARSCNView, skipSetup: Bool = false) {
         super.init(ARSceneKit: ARSceneKit)
         view = ARSceneKit
-        setup()
+        /// Parameter added so that we can override the contentMode
+        /// before it's being passed to the RenderAR object
+        if (!skipSetup) {
+            setup()
+        }
     }
     
     /**
      Initialize 🌞🍳 `RecordAR` with an `ARSKView` 👾.
      */
-    @objc override public init?(ARSpriteKit: ARSKView) {
+    @objc public init?(ARSpriteKit: ARSKView, skipSetup: Bool = false) {
         super.init(ARSpriteKit: ARSpriteKit)
         view = ARSpriteKit
         scnView = SCNView(frame: UIScreen.main.bounds)
@@ -149,7 +153,11 @@ import PhotosUI
         do {
             let scene = try SCNScene(url: url!, options: nil)
             scnView.scene = scene
-            setup()
+            /// Parameter added so that we can override the contentMode
+            /// before it's being passed to the RenderAR object
+            if (!skipSetup) {
+                setup()
+            }
         }catch let error {
             logAR.message("Error occurred while loading SK Video Assets : \(error). Please download \"video.scnassets\" from\nwww.ahmedbekhit.com/ARVideoKitAssets")
         }
@@ -158,10 +166,14 @@ import PhotosUI
     /**
      Initialize 🌞🍳 `RecordAR` with an `SCNView` 🚀.
      */
-    @objc override public init?(SceneKit: SCNView) {
+    @objc public init?(SceneKit: SCNView, skipSetup: Bool = false) {
         super.init(SceneKit: SceneKit)
         view = SceneKit
-        setup()
+        /// Parameter added so that we can override the contentMode
+        /// before it's being passed to the RenderAR object
+        if (!skipSetup) {
+            setup()
+        }
     }
 
     //MARK: - Deinit
@@ -232,7 +244,7 @@ import PhotosUI
     }
     
     //MARK: - Video Setup
-    func setup() {
+    public func setup() {
         if let view = view as? ARSCNView {
             guard let mtlDevice = MTLCreateSystemDefaultDevice() else {
                 logAR.message("ERROR:- This device does not support Metal")
