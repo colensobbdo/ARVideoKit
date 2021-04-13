@@ -27,11 +27,11 @@ import PhotosUI
     /**
      An object that passes the AR recorder errors and status in the protocol methods.
      */
-    @objc public var delegate: RecordARDelegate?
+    @objc weak public var delegate: RecordARDelegate?
     /**
      An object that passes the AR rendered content in the protocol method.
      */
-    @objc public var renderAR: RenderARDelegate?
+    @objc weak public var renderAR: RenderARDelegate?
     /**
      An object that returns the AR recorder current status.
      */
@@ -191,7 +191,6 @@ import PhotosUI
     private var renderEngine: SCNRenderer!
     private var gpuLoop: CADisplayLink!
     private var isResting = false
-    private var ARcontentMode: ARFrameMode!
     private var renderer: RenderAR!
 
     private var scnView: SCNView!
@@ -744,7 +743,7 @@ import PhotosUI
      - parameter configuration: An object that defines motion and scene tracking behaviors for the session.
     */
     @objc func prepare(_ configuration: ARConfiguration? = nil) {
-        ARcontentMode = contentMode
+        renderer.ARcontentMode = contentMode
         onlyRenderWhileRec = onlyRenderWhileRecording
         if let view = view as? ARSCNView {
             UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
@@ -780,6 +779,8 @@ extension RecordAR {
         //frame rendering
         if self.onlyRenderWhileRec && !isRecording && !isRecordingGIF { return }
 
+        renderer.ARcontentMode = contentMode
+
         guard let buffer = renderer.buffer else { return }
         guard let rawBuffer = renderer.rawBuffer else {
             logAR.message("ERROR:- An error occurred while rendering the camera's main buffers.")
@@ -789,7 +790,6 @@ extension RecordAR {
             logAR.message("ERROR:- An error occurred while rendering the camera buffer.")
             return
         }
-        renderer.ARcontentMode = contentMode
 
         self.writerQueue.sync {
             
