@@ -107,6 +107,7 @@ struct RenderAR {
             } else {
                 renderedFrame = renderEngine.snapshot(atTime: time, with: size, antialiasingMode: .none)
             }
+            guard (nil != renderedFrame) else { return nil }
             guard let buffer = renderedFrame!.buffer else { return nil }
             return buffer
         } else if view is ARSKView {
@@ -118,6 +119,7 @@ struct RenderAR {
             if renderedFrame == nil {
                 renderedFrame = renderEngine.snapshot(atTime: time, with: size, antialiasingMode: .none).rotate(by: 180)
             }
+            guard (nil != renderedFrame) else { return nil }
             guard let buffer = renderedFrame!.buffer else { return nil }
             return buffer;
         } else if view is SCNView {
@@ -130,6 +132,7 @@ struct RenderAR {
             } else {
                 renderedFrame = renderEngine.snapshot(atTime: time, with: size, antialiasingMode: .none)
             }
+            guard (nil != renderedFrame) else { return nil }
             guard let buffer = renderedFrame!.buffer else { return nil }
             return buffer
         }
